@@ -22,12 +22,14 @@ fn main() {
     let read_version = read_version();
     match (bump_type, read_version) {
         (ReleaseType::Major, Ok(read_version)) => {
+            println!("writing new major version");
             let new_version = ReleaseVersion{
                 major: read_version.major + 1,
                 minor: 0,
                 patch: 0
             };
-
+            // time to write file
+            write_version(new_version);
         }
         (ReleaseType::Minor, Ok(read_version)) => {
             let new_version = ReleaseVersion{
@@ -35,6 +37,7 @@ fn main() {
                 minor: read_version.minor + 1,
                 patch: 0
             };
+            write_version(new_version);
 
         }
         (ReleaseType::Patch, Ok(read_version)) => {
@@ -43,6 +46,7 @@ fn main() {
                 minor: read_version.minor,
                 patch: read_version.patch + 1
             };
+            write_version(new_version);
 
         }
         (_, Err(e)) => panic!(e.to_string())
@@ -68,6 +72,21 @@ impl ReleaseVersion {
     fn bump_patch(&mut self) {
         self.patch = self.patch + 1;
     }
+
+    fn to_string(&self) -> String {
+        println!("major: {}", self.major);
+        let major_str = self.major.to_string();
+        let minor_str = self.minor.to_string();
+        let patch_str = self.patch.to_string();
+        let mut version_string = String::new();
+        version_string.push_str(&major_str);
+        version_string.push('.');
+        version_string.push_str(&minor_str);
+        version_string.push('.');
+        version_string.push_str(&patch_str);
+        version_string
+
+    }
 }
 
 enum ReleaseType {
@@ -83,6 +102,15 @@ fn read_bump_type(arg: &str) -> Result<ReleaseType, &str> {
         "patch" => Ok(ReleaseType::Patch),
         _ => Err("Bad release type argument"),
     }
+}
+
+fn write_version(version: ReleaseVersion) -> std::io::Result<()> {
+    println!("version to write is: {:?}", version);
+    let mut version_file = File::create("VERSION")?;
+    let version_string = version.to_string();
+    println!("writing version: {}", version_string);
+    version_file.write_all(version_string.as_bytes())?;
+    Ok(())
 }
 
 fn read_version() -> Result<ReleaseVersion, &'static str> {
@@ -137,7 +165,7 @@ fn read_version() -> Result<ReleaseVersion, &'static str> {
                         minor,
                         patch
                     };
-                    println!("recovered from newline");
+                    println!("recovered from newline, version is: {:?}", r);
                     Ok(r)
                 }
                 Err(e) => {
