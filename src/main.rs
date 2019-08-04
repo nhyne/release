@@ -7,7 +7,6 @@ use std::borrow::Borrow;
 use std::error::Error;
 use std::sync::atomic::Ordering::Release;
 
-
 fn main() {
     let args : Vec<String> = env::args().collect();
     let bump_arg = &args[1];
