@@ -50,6 +50,8 @@ fn main() {
         }
         (_, Err(e)) => panic!(e.to_string())
     }
+
+    // time to git tag
 }
 
 #[derive(Debug)]

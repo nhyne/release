@@ -1,0 +1,21 @@
+[lib]
+path = "fake_path.rs"
+
+[package]
+name = "release"
+version = "0.1.0"
+authors = ["nhyne <adamjohnson35@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenv = "0.9.0"
+
+[raze]
+# The WORKSPACE relative path to the Cargo.toml working directory.
+workspace_path = "//cargo"
+
+# The target to generate BUILD rules for.
+target = "x86_64-unknown-linux-gnu"
+genmode = "Remote"
