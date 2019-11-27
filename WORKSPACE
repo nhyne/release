@@ -20,9 +20,6 @@ http_archive(
     url = "https://github.com/bazelbuild/bazel-skylib/archive/1.0.0.tar.gz",
 )
 
-load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
-rust_repositories()
-
 load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
 bazel_version(name = "bazel_version")
 
@@ -36,7 +33,7 @@ rust_repository_set(
     name = "nightly_rust_repository",
     version = "nightly",
     iso_date = "2019-09-05",
-    exec_triple = "x86_64-unknown-linux-gnu",
+    exec_triple = "x86_64-apple-darwin",
     extra_target_triples = []
 )
 
